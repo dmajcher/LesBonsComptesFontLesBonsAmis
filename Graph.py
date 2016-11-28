@@ -30,6 +30,7 @@ class Graph:
 		fPresent = 0
 		sPresent = 0
 		i = 0
+		oldDebt = None
 		while (not fPresent or not sPresent) and i< len(self.__nodesNames):
  			if not fPresent and fPerson == self.__nodesNames[i].getName():
  				fPresent = 1

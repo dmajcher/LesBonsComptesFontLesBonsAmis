@@ -1,11 +1,11 @@
 
 class Arc:
-	def __init__(self,extremite,debt,oldDebt=None):
+	def __init__(self,extremite,debt,oldDebt):
 		self.__extremite = extremite
 		self.__poids = int(debt)
 		self.__oldDebt =[]
 		if oldDebt != None:
-			self.oldDebt.append(oldDebt)
+			self.__oldDebt.append(oldDebt)
 	
 	def getPoids(self):
 		return self.__poids
@@ -20,5 +20,5 @@ class Arc:
 		self.__poids = poids
 
 	def substrToPoids(self,toSub):
-		self.addOldDebt(self.poids)
+		self.addOldDebt(self.__poids)
 		self.__poids -= toSub
