@@ -1,21 +1,18 @@
-from Node import *
-
-
 class Community:
-	def __init__(self, community = []):
-		_community = community
-		_hubs = []
 
-	def getCommunity(self):
-		return self._community
+	def __init__(self,summit,cumminityId):
+		self.__summits = [summit]
+		self.__communityId = cumminityId
 
-	def setHubs(self):
+	def __add__(self,secCom):
+		return self.__summits + secCom.getSummits()
 
+	def addSummit(self,summitToAdd):
+		self.__summits.append(summitToAdd)
 
+	def getSummits(self):
+		return self.__summits
 
+	def getCommunityId(self):
+		return self.__communityId
 
-	def __getitem__(self,key):
-		return self._community[key]
-
-	def __len__(self):
-		return len(self._community)
