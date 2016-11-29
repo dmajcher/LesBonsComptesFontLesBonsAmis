@@ -1,13 +1,16 @@
 from Node import*
 from Arc import*
 from Cfc import*
+from Community import*
 
 class Graph:
 	def __init__(self,fileName):
 		self.__nodesNames = []
 		self.__stack = []
+		self.__communities = []
 		self.createGraph(fileName)
 		self.simplific()
+		self.identifyCommunities()
 
 	def createGraph(self,fileName):
 		try:
@@ -145,8 +148,39 @@ class Graph:
 			self.__nodesNames[j].printArcs()	
 
 	def identifyCommunities(self):
-		for i in range(len(self.__nodesNames)):
-			if not self.__inCommunity[i]:
-				self.browseAndAddtoCom(self.__nodesNames[i])
+		for summit in self.__nodesNames:
+			if not summit.isInCommunity():
+				newCommunity = Community(summit,len(self.__communities))
+				summit.setCommunity(newCommunity)
+				self.__communities.append(newCommunity)
+				self.browseAndAddtoCom(summit,newCommunity)
+		for community in self.__communities:
+			for summit in community.getSummits():
+				print(summit.getName(),end = " ")
+			print("community")
 
-	# def browseAndAddtoCom(self,currentSummit):
+	def browseAndAddtoCom(self,currentSummit,currentCommunity):
+		for arc in currentSummit.getArcs():
+			extremite = arc.getExtremite()
+			if not extremite.isInCommunity():
+				currentCommunity.addSummit(extremite)
+				extremite.setCommunity(currentCommunity)
+				self.browseAndAddtoCom(extremite,currentCommunity)
+			if extremite.getCommunity() != currentCommunity:
+				currentComId = currentCommunity.getCommunityId()
+				extremComId = extremite.getCommunity().getCommunityId()
+				if  extremComId> currentComId:
+					del self.__communities[extremComId]
+					del self.__communities[currentComId]
+				else:
+					del self.__communities[currentComId]
+					del self.__communities[extremComId]
+				currentCommunity= Community(extremite.getCommunity() + currentCommunity,len(self.__communities))
+				self.__communities.append(currentCommunity)
+				for summit in currentCommunity.getSummits():
+					summit.setCommunity(currentCommunity)
+
+
+
+
+
