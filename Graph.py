@@ -11,6 +11,15 @@ class Graph:
 		self.createGraph(fileName)
 		self.simplific()
 		self.identifyCommunities()
+		print("\n\n********************\n")
+		print("Articulation")
+		string=""
+		for i in self.__nodesNames:
+			print(i.getName())
+			print(i.printArcs())
+			# string += i.getName() + " "
+		# print(string)
+		self.findCC()
 
 	def createGraph(self,fileName):
 		try:
@@ -69,6 +78,49 @@ class Graph:
 					return int(debtSF)-debtFS
 					
 		return debtSF
+
+
+
+
+
+
+
+
+
+	def findCC(self):
+		self.__id = 0
+		self.__val = []
+		for i in range(len(self.__nodesNames)):
+			self.__val.append(0)
+		for i in range(len(self.__nodesNames)):
+			if self.__val[i] == 0 :
+				self.exploreCC(i)
+
+	def exploreCC(self, k):
+		print(" \nNouvelle réc\nSommet: "+self.__nodesNames[k].getName())
+		self.__id += 1
+		minimum = 0
+		self.__val[k] = self.__id
+		minimum = self.__id
+		print("minimum in: "+ str(minimum))
+
+		for i in self.__nodesNames[k].getArcs():
+			if i.getPoids() != 0:
+				t = i.getExtremite().getPosition()
+				print("Sommet suivant: "+self.__nodesNames[t].getName())
+				if self.__val[t] == 0:
+					m = self.exploreCC(t)
+					if m < minimum:
+						minimum = m
+					if m >= self.__val[k]:
+						print("Articulation trouvé: " + self.__nodesNames[k].getName())
+				else:
+					if self.__val[t] < minimum:
+						minimum = self.__val[t]
+		return minimum
+
+
+
 
 	def simplific(self):
 		self.findCFC()

@@ -15,4 +15,3 @@ class Community:
 
 	def getCommunityId(self):
 		return self.__communityId
-
