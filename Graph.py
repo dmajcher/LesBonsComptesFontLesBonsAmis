@@ -94,31 +94,42 @@ class Graph:
 			self.__val.append(0)
 		for i in range(len(self.__nodesNames)):
 			if self.__val[i] == 0 :
-				
+				self.__rec = 0
 				self.exploreCC(i)
 
 	def exploreCC(self, k):
-		print(" \nNouvelle réc\nSommet: "+self.__nodesNames[k].getName())
+		self.__rec += 1
+		print(" \n\n==============>>>>    Nouvelle réc("+str(self.__rec)+")\nSommet: "+self.__nodesNames[k].getName())
 		self.__id += 1
-		print("BALISE : "+str(self.__id)+" "+self.__nodesNames[k].getName())
+		# print("BALISE : "+str(self.__id)+" "+self.__nodesNames[k].getName())
 		minimum = 0
 		self.__val[k] = self.__id
 		minimum = self.__id
-		print("minimum in: "+ str(minimum))
-
+		# print("minimum in: "+ str(minimum))
+		arcIndex = 0
 		for arc in self.__nodesNames[k].getArcs():
+			print("**********************************************")
+			print("sommet:"+self.__nodesNames[k].getName()+"\tmin:"+str(minimum)+"\t__val["+str(k)+"]:"+str(self.__val[k])+"\t__id:"+str(self.__id))
+			print("arcIndex: "+ str(arcIndex) +"\t#arcs:"+str(len(self.__nodesNames[k].getArcs())))
+			print("**********************************************")
+			
 			t = arc.getExtremite().getPosition()
 			if self.__val[t] == 0:
 				# if arc.getPoids() != 0:
 				print("Sommet suivant: "+self.__nodesNames[t].getName())
 				m = self.exploreCC(t)
 				if m < minimum:
+					print(str(m)+" < "+str(minimum))
 					minimum = m
 				if m >= self.__val[k]:
 					print("Articulation trouvé: " + self.__nodesNames[k].getName())
 			else:
 				if self.__val[t] < minimum:
+					print(str(self.__val[t])+" < "+str(minimum))
 					minimum = self.__val[t]
+			arcIndex += 1
+		print("exit réc("+str(self.__rec)+") ->return:"+str(minimum)+"    ==============>>>>\n\n")
+		self.__rec -= 1
 		return minimum
 
 
