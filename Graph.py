@@ -13,11 +13,11 @@ class Graph:
 		self.identifyCommunities()
 		print("\n\n********************\n")
 		print("Articulation")
-		string=""
+		# string=""
 		# for i in self.__nodesNames:
 		# 	print(i.getName())
 		# 	print(i.printArcs())
-			# string += i.getName() + " "
+		# 	string += i.getName() + " "
 		# print(string)
 		self.findCC()
 
@@ -93,16 +93,21 @@ class Graph:
 		for i in range(len(self.__nodesNames)):
 			self.__val.append(0)
 		for i in range(len(self.__nodesNames)):
+			string = self.__nodesNames[i].getName()
 			if self.__val[i] == 0 :
+				string+= " not already explored"
 				self.__rec = 0
 				self.exploreCC(i)
+			else :
+				string+= " already explored"
+			print(string)
 
 	def exploreCC(self, k):
 		self.__rec += 1
 		print(" \n\n==============>>>>    Nouvelle réc("+str(self.__rec)+")\nSommet: "+self.__nodesNames[k].getName())
 		self.__id += 1
 		# print("BALISE : "+str(self.__id)+" "+self.__nodesNames[k].getName())
-		minimum = 0
+		# minimum = 0
 		self.__val[k] = self.__id
 		minimum = self.__id
 		# print("minimum in: "+ str(minimum))
@@ -118,13 +123,18 @@ class Graph:
 				# if arc.getPoids() != 0:
 				print("Sommet suivant: "+self.__nodesNames[t].getName())
 				m = self.exploreCC(t)
+				print(str(m)+" < "+str(minimum)+" ?")
 				if m < minimum:
-					print(str(m)+" < "+str(minimum))
+					print("yes --> m("+str(m)+") < minimum("+str(minimum)+")")
 					minimum = m
-				if m >= self.__val[k]:
+				print(str(m)+" >= "+str(self.__val[k])+" ?")
+				if m >= self.__val[k] and k != 0:
+					print("\n####----------------------####")
 					print("Articulation trouvé: " + self.__nodesNames[k].getName())
+					print("####----------------------####\n")
 			else:
 				if self.__val[t] < minimum:
+					print("__val[t]("+str(self.__val[t])+") < minimum("+str(minimum)+")")
 					print(str(self.__val[t])+" < "+str(minimum))
 					minimum = self.__val[t]
 			arcIndex += 1
