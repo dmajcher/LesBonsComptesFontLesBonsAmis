@@ -33,15 +33,15 @@ Facult\'e des Sciences, Universit\'e Libre de Bruxelles\\
 \newpage
 \setcounter{page}{1}
 \section{Introduction}
-L'emprunt et ainsi la création de dettes est un phénomène courant dans la société. Le projet a pour objectif la conception d'un programme mémorisant et simplifiant les dettes au sein de communautés.
+L'emprun et ainsi la création de dettes est un phénomène courant dans la société. Le projet a pour objectif la conception d'un programme mémorisant et simplifiant les dettes au sein de communautés.
 
 \section{description et tests}
 \subsection{Structure du programme}
-Le programme se compose de plusieurs classes de manière à suivre le paradigme orienté objet .Le rôle chaque classes est expliqué ci dessous. Le main se situe dans lbcflba.py, la création du graphe suivie des autres algorithmes demandés y est lancée.  
+Le programme se compose de plusieurs classes de manière à suivre le paradigme orienté objet .Le rôle de chacune des classes est expliqué ci dessous. Le main se situe dans lbcflba.py, la création du graphe suivie des autres algorithmes demandés y est lancée.  
 \smallbreak
 \noindent Classes:
 \begin{itemize} 
-\item Graph: Cette classe représente le graphe en lui même, Il a pour attribut la liste des noeuds du graphe, mais les liens entre ces noeuds(arcs) ne s'y trouvent pas. Il possède également la liste des communautés qui le composent ainsi que la liste des hubs sociaux qui articulent ce graphe. Les méthodes de création, de simplification du graphe, d'identification des communautés et d'identification des hubs s'y trouvent également.
+\item Graph: Cette classe représente le graphe en lui même, Il a pour attribut la liste des noeuds du graphe, mais les liens entre ces noeuds(arcs) ne s'y trouvent pas. Il possède également la liste des communautés qui le composent. Les méthodes de création, de simplification du graphe et d'identification des communautés s'y trouvent également.
 \item Node: L'attribut de l'objet Graph qui contient la liste de noeuds est logiquement une liste composée d'objet Noeuds. C'est dans cet objet que l'on trouve les liens vers les autres objets "Node". Ce lien est représenté par une liste d'Arcs. En plus, cet attribut on retrouve également le nom, la position dans le graphe(ordre d'arrivé, utilisé dans la recherche de composantes fortements connexes) et pour finir un booléen indiquant si le noeud se trouve dans une comunauté(utilisé ds la recherche de communautés). Les méthodes sont pour la plupart des getters/setters. En plus de celles-ci, on y trouve la méthode permettant d'ajouter un arc. 
 \item Arc: Cet objet compose la liste dans "Node". Il n'a que deux attributs, "extremite" qui est de type "Node". Extremité est donc le sommet qui se trouve au bout de l'arc. Ainsi, on peut parcourir le graphe en passant de sommet à sommet par l'intermédiaire d'arcs. Le deuxième attribut est le poids de l'arc. Dans notre contexte, il correspond à la dette entre la personne dont part l'arc et la personne à l'"extremité" de l'arc.
 \item Cfc: Composante fortement connexe. Les méthodes servent principalement à la suppresion de cycles.
@@ -121,7 +121,7 @@ Le rôle de cet algorithme est d'extraire les informations nécessaires à la cr
 \end{algorithmic}	
 \end{algorithm}
 \begin{figure}[H]
-%\includegraphics[scale=0.4]{createGraph.png}\\
+\includegraphics[scale=0.4]{createGraph.png}\\
 \end{figure}
 \newpage
 \subsubsection{updateGraph()}
@@ -176,10 +176,10 @@ Operation~\ref{While} : La première partie de la condition sert à détecter si
 
 Pour ce test, On montre que les sommets sont bien tous ajoutés au graphe. Montrer les liens entre ces sommets prendrait trop de place.
 \begin{figure}[H]
-%\includegraphics[scale=0.4]{update1.png}\\
+\includegraphics[scale=0.4]{update1.png}\\
 \end{figure}
 \begin{figure}[H]
-%\includegraphics[scale=0.4]{update2.png}\\
+\includegraphics[scale=0.4]{update2.png}\\
 \end{figure}	
 \subsubsection{cancelMutualDebt()}
 Cet algorithme permet donc de simplifier les dettes entre 2 noeuds. Si ils se doivent mutuellement de l'argent.
@@ -211,7 +211,7 @@ Etapes:
 \end{algorithm}
 Pour cette partie seul le test1 est pertinent.
 \begin{figure}[H]
-%\includegraphics[scale=0.4]{cancel.png}\\
+\includegraphics[scale=0.4]{cancel.png}\\
 \end{figure}
 \subsection{Simplification des dettes [classe: Graph]}
 Il y a plusieurs étapes répartie en 2 classes pour la simplification.
@@ -300,16 +300,15 @@ Cet algorithme fait presque la meme chose que \textit{exploreCC} (CF:2.7.2) à l
 \EndProcedure
 \end{algorithmic}
 \end{algorithm}
-
-
 \subsubsection{saveCFCGreaterThenOne()}
+Cette méthode transforme les données brutes trouvées dans l'algorithme findCFC en des données groupées par CFC. A l'aide de ces données la méthode crée ensuite les objets cfc.
 \begin{algorithm}[H]
 \caption{saveCFCGreaterThenOne}\label{save}
 \begin{algorithmic}[1]
 \Procedure{saveCFCGreaterThenOne}{}
 \State $\textit{self.CFCs} \gets \text{ [] initialisation attribut qui va contenir les cfcs} $
 \State $\textit{temp} \gets \text{ []} $
-\For{\text{i de 0 à ordre du graphe}}
+\For{\text{i de 0 à ordre du grahe}}
 \If{\text{longueur de }\textit{temp}\text{-1 < numéro de la composante dans} \textit{self.comp} \text{à l'indice} \textit{i}}
 \For{\text{numéro de la composante - longueur}\textit{ temp}\text{-1}}
 \State $\textit{temp}\text{.append([])}$
@@ -331,6 +330,7 @@ Cet algorithme fait presque la meme chose que \textit{exploreCC} (CF:2.7.2) à l
 \EndProcedure
 \end{algorithmic}
 \end{algorithm}
+\includegraphics[scale=0.4]{save.png}\\
 \subsubsection{deleteCycles}
 Appel à la suppression des cycles pour toutes les CFC >1.
 \begin{algorithm}
@@ -345,7 +345,7 @@ Appel à la suppression des cycles pour toutes les CFC >1.
 \end{algorithm}
 \subsection{Simplification des dettes [classe: CFC]}
 \subsubsection{getLinkingArcs()}
-Une fois que l'on a les sommets on a besoin des Arcs qui les lient. On retient également le  sommet avec le poids le plus faible(pour notre algorithme de suppresion de cycles),son poids et l'arc de départ. 
+Une fois que l'on a les sommets, on a besoin des Arcs qui les lient. On retient également le  sommet avec le poids le plus faible(pour notre algorithme de suppresion de cycles),son poids et l'arc de départ. 
 \begin{algorithm}[H]
 \caption{getLinkingArcs}\label{Link}
 \begin{algorithmic}[1]
@@ -452,6 +452,7 @@ $\text{communaute d'extremite et de currentCommunity,le nombre de communauté)}$
 \EndProcedure
 \end{algorithmic}
 \end{algorithm}
+\includegraphics[scale=0.4]{comm.png}\\
 \subsection{Identification des hubs sociaux [classe: Graph] }
 \subsubsection{findCC()}
 L'algorithme findCC() parcourt les sommets du graphe à la recherche d'un sommet qui n'a pas encore été  exploré. Si tel est le cas, le sommet en question est utilisé comme racine pour la méthode d'exploration exploreCC()
