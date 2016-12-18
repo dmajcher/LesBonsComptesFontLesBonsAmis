@@ -8,17 +8,13 @@ class Graph:
 		self.__nodesNames = []
 		self.__stack = []
 		self.__communities = []
+		self.__hubs = []
 		self.createGraph(fileName)
 		self.simplific()
 		self.identifyCommunities()
 		print("\n\n********************\n")
 		print("Articulation")
-		# string=""
-		# for i in self.__nodesNames:
-		# 	print(i.getName())
-		# 	print(i.printArcs())
-		# 	string += i.getName() + " "
-		# print(string)
+		
 		self.findCC()
 
 	def createGraph(self,fileName):
@@ -87,60 +83,7 @@ class Graph:
 
 
 
-	def findCC(self):
-		self.__id = 0
-		self.__val = []
-		for i in range(len(self.__nodesNames)):
-			self.__val.append(0)
-		for i in range(len(self.__nodesNames)):
-			string = self.__nodesNames[i].getName()
-			if self.__val[i] == 0 :
-				string+= " not already explored"
-				self.__rec = 0
-				self.exploreCC(i)
-			else :
-				string+= " already explored"
-			print(string)
-
-	def exploreCC(self, k):
-		self.__rec += 1
-		print(" \n\n==============>>>>    Nouvelle réc("+str(self.__rec)+")\nSommet: "+self.__nodesNames[k].getName())
-		self.__id += 1
-		# print("BALISE : "+str(self.__id)+" "+self.__nodesNames[k].getName())
-		# minimum = 0
-		self.__val[k] = self.__id
-		minimum = self.__id
-		# print("minimum in: "+ str(minimum))
-		arcIndex = 0
-		for arc in self.__nodesNames[k].getArcs():
-			print("**********************************************")
-			print("sommet:"+self.__nodesNames[k].getName()+"\tmin:"+str(minimum)+"\t__val["+str(k)+"]:"+str(self.__val[k])+"\t__id:"+str(self.__id))
-			print("arcIndex: "+ str(arcIndex) +"\t#arcs:"+str(len(self.__nodesNames[k].getArcs())))
-			print("**********************************************")
-			
-			t = arc.getExtremite().getPosition()
-			if self.__val[t] == 0:
-				# if arc.getPoids() != 0:
-				print("Sommet suivant: "+self.__nodesNames[t].getName())
-				m = self.exploreCC(t)
-				print(str(m)+" < "+str(minimum)+" ?")
-				if m < minimum:
-					print("yes --> m("+str(m)+") < minimum("+str(minimum)+")")
-					minimum = m
-				print(str(m)+" >= "+str(self.__val[k])+" ?")
-				if m >= self.__val[k] and k != 0:
-					print("\n####----------------------####")
-					print("Articulation trouvé: " + self.__nodesNames[k].getName())
-					print("####----------------------####\n")
-			else:
-				if self.__val[t] < minimum:
-					print("__val[t]("+str(self.__val[t])+") < minimum("+str(minimum)+")")
-					print(str(self.__val[t])+" < "+str(minimum))
-					minimum = self.__val[t]
-			arcIndex += 1
-		print("exit réc("+str(self.__rec)+") ->return:"+str(minimum)+"    ==============>>>>\n\n")
-		self.__rec -= 1
-		return minimum
+	
 
 
 
@@ -214,6 +157,65 @@ class Graph:
 				self.__CFCs[-1].printSum()
 				self.__CFCs[-1].getLinkingArcs()
 				self.__CFCs[-1].initMarkedList()
+
+	def findCC(self):
+		self.__id = 0
+		self.__val = []
+		for i in range(len(self.__nodesNames)):
+			self.__val.append(0)
+			print(self.__nodesNames[i].getName())
+		for i in range(len(self.__nodesNames)):
+			if self.__val[i] == 0 :
+				self.__rec = 0
+				self.exploreCC(i)
+		string = "Hubs ---> ["
+		for i in range(len(self.__hubs)):
+			if i < (len(self.__hubs)-1):
+				string += self.__hubs[i].getName()+","
+			else:
+				string += self.__hubs[i].getName()+"]"
+		print(string)
+
+	def exploreCC(self, k):
+		self.__rec += 1
+		# print(" \n\n==============>>>>    Nouvelle réc("+str(self.__rec)+")\nSommet: "+self.__nodesNames[k].getName())
+		self.__id += 1
+		# print("BALISE : "+str(self.__id)+" "+self.__nodesNames[k].getName())
+		# minimum = 0
+		self.__val[k] = self.__id
+		minimum = self.__id
+		# print("minimum in: "+ str(minimum))
+		arcIndex = 0
+		for arc in self.__nodesNames[k].getArcs():
+			# print("**********************************************")
+			# print("sommet:"+self.__nodesNames[k].getName()+"\tmin:"+str(minimum)+"\t__val["+str(k)+"]:"+str(self.__val[k])+"\t__id:"+str(self.__id))
+			# print("arcIndex: "+ str(arcIndex) +"\t#arcs:"+str(len(self.__nodesNames[k].getArcs())))
+			# print("**********************************************")
+			
+			t = arc.getExtremite().getPosition()
+			if self.__val[t] == 0:
+				# print("Sommet suivant: "+self.__nodesNames[t].getName())
+				m = self.exploreCC(t)
+				# print(str(m)+" < "+str(minimum)+" ?")
+				if m < minimum:
+					# print("yes --> m("+str(m)+") < minimum("+str(minimum)+")")
+					minimum = m
+				# print(str(m)+" >= "+str(self.__val[k])+" ?")
+				if m >= self.__val[k] and k != 0:
+					if self.__nodesNames[k].getName() not in self.__hubs:
+						self.__hubs.append(self.__nodesNames[k])
+						# print("\n####----------------------####")
+						# print("Articulation trouvé: " + self.__nodesNames[k].getName())
+						# print("####----------------------####\n")
+			else:
+				if self.__val[t] < minimum:
+					# print("__val[t]("+str(self.__val[t])+") < minimum("+str(minimum)+")")
+					# print(str(self.__val[t])+" < "+str(minimum))
+					minimum = self.__val[t]
+			arcIndex += 1
+		# print("exit réc("+str(self.__rec)+") ->return:"+str(minimum)+"    ==============>>>>\n\n")
+		self.__rec -= 1
+		return minimum
 
 	def suppressCycles(self):
 		for i in range(len(self.__CFCs)):
